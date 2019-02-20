@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Name Quiz</string>
+    <string name="showDatabase">Show database</string>
+    <string name="startQuiz">Start Quiz</string>
+    <string name="addToDatabase">Add to database</string>
+    <string name="title_activity_quiz">QuizActivity</string>
+
+    <string name="pluss">Pluss</string>
+
+    <string name="score">Score: </string>
+    <string name="attempts">Attempts: </string>
+    <string name="guess_who">Who is this?</string>
+    <string name="guess">Guess</string>
+    <string name="correct">Correct</string>
+
+    <string name="select_image">Select image</string>
+    <string name="capture_image">Capture image</string>
+    <string name="person_name_hint">Enter name...</string>
+    <string name="add_person">Add person</string>
+    <string name="shared_preferences">Shared Preferences</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:id="@+id/owner_category_title"
+        android:title="Owner">
+
+        <EditTextPreference
+            android:key="owner"
+            android:title="Owner name"
+            android:summary="Name of the phone's owner"
+            android:defaultValue="Navn Navnesen"
+            android:dialogTitle="Enter the name of the owner"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

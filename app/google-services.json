@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "319607716559",
+    "firebase_url": "https://androidnamequiz.firebaseio.com",
+    "project_id": "androidnamequiz",
+    "storage_bucket": "androidnamequiz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319607716559:android:6ce908d202a775c6",
+        "android_client_info": {
+          "package_name": "com.example.namequizapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319607716559-65hmpju1157752hetdopqin5l8gpagvo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.namequizapp",
+            "certificate_hash": "413d666d35717df5ffa2a224121afe276849bdb1"
+          }
+        },
+        {
+          "client_id": "319607716559-t9foftjuuho0gjrrr3svhr62edk8j334.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.namequizapp",
+            "certificate_hash": "e894e7ba31a45ab8fd200bcefef06f4ef54264b3"
+          }
+        },
+        {
+          "client_id": "319607716559-sgsls9ep6sps54vhb0bs2421bnc56deg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4npOTj-Mp2_z4_EPF09a7sxUslaf3SBk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319607716559-sgsls9ep6sps54vhb0bs2421bnc56deg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
