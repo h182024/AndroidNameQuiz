@@ -47,53 +47,22 @@ public class startQuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_quiz);
-
-        if (uploads != null) {
-            startNewGame();
+        FirebaseApp.initializeApp(this);
+        cl = giveList();
+        if (cl != null) {
+            startNewGame(cl);
         } else {
-            Toast.makeText(getApplicationContext(), "nullPointerException", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "nullPointerException", Toast.LENGTH_SHORT).show();
         }
 
         initializeApp(this);
     }
 
-    public Uploads giveRandom(){
-        int s = 0;
-        if (cl != null){
-            s = cl.size();
-            Random r = new Random();
-            int l = 0;
-            int res = r.nextInt(s-l) + l;
-            return cl.get(res);
-        } else {
-        return null;
-        }
 
 
-    }
+    private void startNewGame(ArrayList<Uploads> c){
 
-    private void startNewGame(){
-
-        FirebaseApp.initializeApp(this);
-
-        mDatabase = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
-
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Uploads uploads = snapshot.getValue(Uploads.class);
-                    cl.add(uploads);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        currentPerson = giveRandom();
+        currentPerson = giveRandom(c);
         score = 0;
         scoreCountView = findViewById(R.id.textView_score);
         scoreCountView.setText(score.toString());
@@ -132,7 +101,7 @@ public class startQuizActivity extends AppCompatActivity {
                      .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                          @Override
                          public void onClick(DialogInterface dialog, int which) {
-                             startNewGame();
+                             startNewGame(cl);
                          }
                      })
                      .setNegativeButton("Return to menu", new DialogInterface.OnClickListener() {
@@ -145,7 +114,7 @@ public class startQuizActivity extends AppCompatActivity {
                      .show();
          } else {
              while (guessed.contains(currentPerson)) {
-                 currentPerson = giveRandom();
+                 currentPerson = giveRandom(cl);
              }
 
              //update
@@ -159,5 +128,40 @@ public class startQuizActivity extends AppCompatActivity {
      } else {
          Toast.makeText(getApplicationContext(), "nullPointerException", Toast.LENGTH_LONG);
      }
+    }
+    public Uploads giveRandom(ArrayList<Uploads> list){
+        int s = 0;
+        if (cl != null){
+            s = cl.size();
+            Random r = new Random();
+            int l = 0;
+            int res = r.nextInt(s-l) + l;
+            return cl.get(res);
+        } else {
+            return null;
+        }
+
+
+    }
+    public ArrayList<Uploads> giveList() {
+        FirebaseApp.initializeApp(this);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
+
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Uploads uploads = snapshot.getValue(Uploads.class);
+                    cl.add(uploads);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return cl;
     }
 }
