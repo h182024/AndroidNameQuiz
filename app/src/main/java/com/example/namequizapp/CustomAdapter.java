@@ -23,12 +23,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 public class CustomAdapter extends ArrayAdapter<Uploads> {
     private Context context;
-    private ArrayList<Uploads> uploadsList;
+    private List<Uploads> uploadsList;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
 

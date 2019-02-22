@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.namequizapp.data.Constants;
 import com.example.namequizapp.data.GlideApp;
+import com.example.namequizapp.data.UploadList;
 import com.example.namequizapp.data.Uploads;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static com.google.firebase.FirebaseApp.initializeApp;
@@ -32,7 +34,8 @@ public class startQuizActivity extends AppCompatActivity {
 
     private Uploads uploads;
     private ArrayList<Uploads> guessed;
-    private ArrayList<Uploads> cl;
+    private List<Uploads> c;
+    private UploadList uList;
     private Integer score = 0;
     private Integer attempts = 0;
     private Uploads currentPerson;
@@ -40,27 +43,23 @@ public class startQuizActivity extends AppCompatActivity {
     private TextView scoreCountView;
     private TextView attemptsView;
     private EditText guessText;
-    private DatabaseReference mDatabase;
     private StorageReference mStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_quiz);
-        FirebaseApp.initializeApp(this);
-        cl = giveList();
-        if (cl != null) {
+        giveList(c);
+        List<Uploads> cl = uList.getuList();
+        if (cl.size() > 0) {
             startNewGame(cl);
         } else {
-            Toast.makeText(getApplicationContext(), "nullPointerException", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "List is empty", Toast.LENGTH_LONG).show();
         }
-
-        initializeApp(this);
     }
 
 
-
-    private void startNewGame(ArrayList<Uploads> c){
+    private void startNewGame(List<Uploads> c){
 
         currentPerson = giveRandom(c);
         score = 0;
@@ -80,7 +79,8 @@ public class startQuizActivity extends AppCompatActivity {
     }
 
     public void guess(View view){
-        initializeApp(getApplicationContext());
+        giveList(c);
+        final List<Uploads> list = uList.getuList();
         guessText = findViewById(R.id.editText_guess);
         String guess = guessText.getText().toString();
 
@@ -94,14 +94,14 @@ public class startQuizActivity extends AppCompatActivity {
              Toast.makeText(getApplicationContext(), "Wrong, that was " + currentPerson.getName() + "!", Toast.LENGTH_LONG).show();
          }
 
-         if (guessed.size() >= cl.size()) { //if game is over
+         if (guessed.size() >= list.size()) { //if game is over
              AlertDialog.Builder builder = new AlertDialog.Builder(this);
              builder.setTitle("Game Over")
-                     .setMessage("You got " + score + "/" + cl.size() + " points.")
+                     .setMessage("You got " + score + "/" + list.size() + " points.")
                      .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                          @Override
                          public void onClick(DialogInterface dialog, int which) {
-                             startNewGame(cl);
+                             startNewGame(list);
                          }
                      })
                      .setNegativeButton("Return to menu", new DialogInterface.OnClickListener() {
@@ -114,7 +114,7 @@ public class startQuizActivity extends AppCompatActivity {
                      .show();
          } else {
              while (guessed.contains(currentPerson)) {
-                 currentPerson = giveRandom(cl);
+                 currentPerson = giveRandom(list);
              }
 
              //update
@@ -129,32 +129,35 @@ public class startQuizActivity extends AppCompatActivity {
          Toast.makeText(getApplicationContext(), "nullPointerException", Toast.LENGTH_LONG);
      }
     }
-    public Uploads giveRandom(ArrayList<Uploads> list){
+    public Uploads giveRandom(List<Uploads> list){
         int s = 0;
-        if (cl != null){
-            s = cl.size();
+        if (list != null){
+            s = list.size();
             Random r = new Random();
-            int l = 0;
-            int res = r.nextInt(s-l) + l;
-            return cl.get(res);
+            int res = r.nextInt(s);
+            return list.get(res);
         } else {
             return null;
         }
 
 
     }
-    public ArrayList<Uploads> giveList() {
+    public void giveList(final List<Uploads> cl) {
         FirebaseApp.initializeApp(this);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(Constants.DATABASE_PATH_UPLOADS);
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                uList = new UploadList(cl);
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Uploads uploads = snapshot.getValue(Uploads.class);
                     cl.add(uploads);
+                    uList.setuList(cl);
                 }
+
+
             }
 
             @Override
@@ -162,6 +165,6 @@ public class startQuizActivity extends AppCompatActivity {
 
             }
         });
-        return cl;
+
     }
 }
